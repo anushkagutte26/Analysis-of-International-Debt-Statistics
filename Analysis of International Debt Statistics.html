@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analysis of International Debt Statistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="Analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="Analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Analysis_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Analysis_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Analysis of International Debt Statistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="executive-summary" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
+<p>This note analyses sovereign debt vulnerability across developing countries using cross-sectional data from the World Bank’s International Debt Statistics (IDS) for 2023. The analysis finds that <strong>a substantial share of developing countries — particularly in Sub-Saharan Africa and Latin America — exceed key IMF/World Bank stress thresholds</strong> for external debt. Higher debt burdens, costlier borrowing terms, and elevated short-term debt shares are the primary drivers of debt service pressure. The shift away from concessional multilateral financing toward market-rate instruments is compressing the financial space available to governments and increasing rollover risk. Urgent reforms to the sovereign debt architecture are needed to restore sustainable financing pathways for the most vulnerable countries.</p>
+<hr>
+</section>
+<section id="background-and-motivation" class="level2">
+<h2 class="anchored" data-anchor-id="background-and-motivation">1. Background and Motivation</h2>
+<p>The global sovereign debt landscape has deteriorated markedly since the COVID-19 pandemic. Rising interest rates in advanced economies, currency depreciations, and slowing growth have compressed fiscal space across the developing world. The number of low- and middle-income countries at high risk of — or already in — debt distress has risen to historically elevated levels, yet the international debt restructuring architecture remains fragmented and slow.</p>
+<p>This analysis uses the World Bank’s <strong>International Debt Statistics (IDS)</strong> database — the most comprehensive publicly available dataset on external debt stocks, flows, and creditor composition for developing countries — to provide a systematic cross-sectional snapshot of debt vulnerability in 2023. The goal is to identify countries and patterns of concern and to draw policy-relevant conclusions about the evolving structure of developing country debt.</p>
+<hr>
+</section>
+<section id="data-and-methodology" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-methodology">2. Data and Methodology</h2>
+<section id="data-source" class="level3">
+<h3 class="anchored" data-anchor-id="data-source">2.1 Data Source</h3>
+<p>All data are drawn from the <strong>World Bank International Debt Statistics (IDS), 2023</strong>. The IDS covers external debt stocks and flows for low- and middle-income countries, disaggregated by creditor type (multilateral, bilateral, bonds, commercial banks) and debt category (public and publicly guaranteed, private non-guaranteed, short-term).</p>
+<p>The following indicators were used:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 25%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Indicator</th>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>External debt (% GNI)</td>
+<td>DT.DOD.DECT.GN.ZS</td>
+<td>Primary sustainability ratio</td>
+</tr>
+<tr class="even">
+<td>Total debt service (% exports)</td>
+<td>DT.TDS.DECT.EX.ZS</td>
+<td>Debt repayment burden</td>
+</tr>
+<tr class="odd">
+<td>Short-term debt share</td>
+<td>DT.DOD.DSTC.ZS</td>
+<td>Rollover and liquidity risk</td>
+</tr>
+<tr class="even">
+<td>Reserves (months of imports)</td>
+<td>FI.RES.TOTL.MO</td>
+<td>External buffer adequacy</td>
+</tr>
+<tr class="odd">
+<td>Multilateral debt</td>
+<td>DT.DOD.MLAT.CD</td>
+<td>MDB financing</td>
+</tr>
+<tr class="even">
+<td>Bilateral debt</td>
+<td>DT.DOD.BLAT.CD</td>
+<td>Government-to-government lending</td>
+</tr>
+<tr class="odd">
+<td>Bond debt</td>
+<td>DT.DOD.PBND.CD</td>
+<td>Market financing</td>
+</tr>
+<tr class="even">
+<td>Commercial bank debt</td>
+<td>DT.DOD.PCBK.CD</td>
+<td>Private creditor exposure</td>
+</tr>
+<tr class="odd">
+<td>Concessional debt share</td>
+<td>DT.DOD.ALLC.CD</td>
+<td>Concessionality of portfolio</td>
+</tr>
+<tr class="even">
+<td>Grant element on new loans</td>
+<td>DT.GRE.DPPG</td>
+<td>Terms on new commitments</td>
+</tr>
+<tr class="odd">
+<td>Average interest rate</td>
+<td>DT.INR.DPPG</td>
+<td>Cost of new borrowing</td>
+</tr>
+</tbody>
+</table>
+<p><em>Source: World Bank IDS Databank, 2025 edition.</em></p>
+</section>
+<section id="country-coverage" class="level3">
+<h3 class="anchored" data-anchor-id="country-coverage">2.2 Country Coverage</h3>
+<p>The sample covers all low-income, lower-middle-income, and upper-middle-income countries for which data are available in 2023. Aggregate and regional groupings provided by the World Bank are excluded to ensure country-level analysis.</p>
+</section>
+<section id="risk-classification" class="level3">
+<h3 class="anchored" data-anchor-id="risk-classification">2.3 Risk Classification</h3>
+<p>Countries are classified into three risk tiers based on IMF and World Bank debt sustainability thresholds:</p>
+<ul>
+<li><strong>High Risk</strong>: External debt &gt; 60% of GNI <strong>and</strong> debt service &gt; 20% of exports</li>
+<li><strong>Elevated Risk</strong>: External debt &gt; 40% of GNI <strong>or</strong> debt service &gt; 15% of exports</li>
+<li><strong>Moderate</strong>: Below both thresholds</li>
+</ul>
+</section>
+<section id="regression-model" class="level3">
+<h3 class="anchored" data-anchor-id="regression-model">2.4 Regression Model</h3>
+<p>To identify the key drivers of debt service burden, an OLS regression was estimated with total debt service (% of exports) as the dependent variable:</p>
+<p><span class="math display">\[\text{Debt Service}_i = \beta_0 + \beta_1\,\text{Debt/GNI}_i + \beta_2\,\text{Short-term share}_i + \beta_3\,\text{Reserves}_i + \beta_4\,\text{Concessional share}_i + \beta_5\,\text{Grant element}_i + \varepsilon_i\]</span></p>
+<hr>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">3. Results</h2>
+<section id="debt-vulnerability-a-cross-country-view" class="level3">
+<h3 class="anchored" data-anchor-id="debt-vulnerability-a-cross-country-view">3.1 Debt Vulnerability: A Cross-Country View</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"p1_vulnerability.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="p1_vulnerability.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 1. External Debt Vulnerability, 2023</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="fig-note">
+<p>Note: Dashed lines indicate IMF/World Bank stress thresholds: 40% GNI (vertical) and 15% of exports (horizontal). Red shading marks the high-risk zone. Country codes label countries classified as High Risk. Source: World Bank IDS, 2023.</p>
+</div>
+<p>Figure 1 plots each country’s external debt stock (as a share of GNI) against its total debt service ratio (as a share of exports). Several features stand out:</p>
+<ul>
+<li><strong>Lebanon (LBN) and Mozambique (MOZ)</strong> are extreme outliers, with external debt stocks exceeding 300% of GNI and debt service ratios above 30–45% of exports — far beyond any conventional sustainability benchmark.</li>
+<li><strong>El Salvador (SLV)</strong> stands out for its acute debt service burden (over 80% of exports) despite a moderate debt stock, reflecting the compressed maturity structure and high interest costs of its dollarised economy.</li>
+<li><strong>Mongolia (MNG), Senegal (SEN), and Suriname (SUR)</strong> all sit in or near the high-risk quadrant, consistent with their ongoing engagement with IMF programmes and debt restructuring processes.</li>
+<li>The majority of countries cluster at debt levels below 60% of GNI, but many already exceed the 15% debt service threshold — indicating that service pressure is widespread even at seemingly moderate stock levels.</li>
+</ul>
+<div class="key-finding">
+<p><strong>Finding 1:</strong> Debt service pressure is more widespread than debt stock ratios alone suggest. A significant share of developing countries exceed the 15% export threshold for debt service even when their aggregate debt stocks appear manageable, pointing to unfavourable loan terms and compressed maturities as key drivers.</p>
+</div>
+<hr>
+</section>
+<section id="creditor-composition-the-structural-shift-away-from-multilaterals" class="level3">
+<h3 class="anchored" data-anchor-id="creditor-composition-the-structural-shift-away-from-multilaterals">3.2 Creditor Composition: The Structural Shift Away from Multilaterals</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"p2_creditors.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="p2_creditors.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 2. Creditor Composition of External Debt, Top 30 Countries, 2023</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="fig-note">
+<p>Note: Shows the 30 countries with the largest total external debt stocks. Shares are of public and publicly guaranteed (PPG) external debt. Source: World Bank IDS, 2023.</p>
+</div>
+<p>Figure 2 reveals striking heterogeneity in creditor composition across developing countries:</p>
+<ul>
+<li><strong>Bond financing dominates</strong> among upper-middle-income and larger lower-middle-income economies (Argentina, Brazil, Colombia, Mexico, Turkey), where private market access exists but comes at market rates with shorter maturities.</li>
+<li><strong>Multilateral creditors</strong> remain the primary source for many lower-income countries — particularly in South Asia and Sub-Saharan Africa — reflecting continued IDA and MDB engagement.</li>
+<li><strong>Bilateral creditors</strong> (including China) hold a large share of debt in several Sub-Saharan African countries and in Vietnam, consistent with Belt and Road Initiative (BRI) financing patterns documented elsewhere.</li>
+<li>The presence of <strong>commercial banks</strong> is most pronounced in East Asia and Latin America, adding an additional layer of private creditor coordination complexity in any future restructuring.</li>
+</ul>
+<div class="key-finding">
+<p><strong>Finding 2:</strong> The creditor landscape is highly fragmented. Countries with large bilateral and bond exposures face coordination challenges in any restructuring scenario, as these creditors operate under different legal frameworks and have historically resisted comparable treatment — a core challenge identified in the G20 Common Framework.</p>
+</div>
+<hr>
+</section>
+<section id="liquidity-risk-reserves-vs-short-term-debt" class="level3">
+<h3 class="anchored" data-anchor-id="liquidity-risk-reserves-vs-short-term-debt">3.3 Liquidity Risk: Reserves vs Short-Term Debt</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"p3_liquidity.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="p3_liquidity.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 3. Liquidity Risk: Reserve Coverage vs Short-Term Debt, 2023</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="fig-note">
+<p>Note: The vertical dashed line marks the IMF’s 3-month reserve adequacy benchmark. The red-shaded region indicates acute liquidity risk (low reserves combined with high short-term debt). Source: World Bank IDS, 2023.</p>
+</div>
+<p>Figure 3 plots reserve coverage against the share of external debt that is short-term, providing a liquidity risk lens distinct from the solvency analysis in Figure 1:</p>
+<ul>
+<li>Several countries hold <strong>fewer than 3 months of import cover</strong> (below the IMF benchmark), making them acutely vulnerable to external shocks or sudden capital flow reversals.</li>
+<li>Countries with <strong>high short-term debt shares</strong> (above 40%) face significant rollover risk — even if their total debt stock appears manageable, a loss of market access could trigger immediate liquidity distress.</li>
+<li>Interestingly, several <strong>Moderate-risk countries</strong> (blue) have very low short-term debt shares, reflecting the concessional nature of their borrowing (long-maturity IDA and bilateral loans), while <strong>Elevated-risk countries</strong> cluster at higher short-term shares.</li>
+</ul>
+<div class="key-finding">
+<p><strong>Finding 3:</strong> Reserve inadequacy and high short-term debt shares are concentrated among Elevated Risk countries, creating a dangerous combination where any deterioration in market sentiment could rapidly convert a liquidity event into a solvency crisis.</p>
+</div>
+<hr>
+</section>
+<section id="borrowing-terms-the-retreat-of-concessional-finance" class="level3">
+<h3 class="anchored" data-anchor-id="borrowing-terms-the-retreat-of-concessional-finance">3.4 Borrowing Terms: The Retreat of Concessional Finance</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"p4_loan_terms.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="p4_loan_terms.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 4. Borrowing Terms on New External Debt Commitments, 2023</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="fig-note">
+<p>Note: The grant element measures the concessionality of a loan relative to a market reference rate. Negative values indicate loans with above-market interest rates. Labelled countries have particularly high interest rates or very low grant elements. Source: World Bank IDS, 2023.</p>
+</div>
+<p>Figure 4 examines the terms on <strong>new</strong> external debt commitments — a forward-looking indicator of the trajectory of debt sustainability:</p>
+<ul>
+<li>There is a <strong>strong negative relationship</strong> between average interest rates and grant elements, as expected: higher interest loans carry lower concessionality.</li>
+<li>Several countries — including <strong>Jamaica (JAM), Zimbabwe (ZWE), Montenegro (MNE), and Dominican Republic (DOM)</strong> — are committing to new debt at interest rates above 7.5% with negative grant elements, meaning they are borrowing on terms <strong>worse than the market reference rate</strong>.</li>
+<li>Countries in the <strong>Moderate risk</strong> category (blue) tend to cluster at low interest rates and high grant elements, reflecting continued access to IDA and other concessional windows.</li>
+<li>The <strong>High Risk</strong> group is scattered across the interest rate spectrum, suggesting that even distressed countries retain some access to new borrowing — often at punishing terms.</li>
+</ul>
+<div class="key-finding">
+<p><strong>Finding 4:</strong> The retreat of concessional finance is pushing many developing countries into market-rate borrowing at precisely the moment when their debt positions are most fragile. Countries committing to new debt with negative grant elements are locking in a structural deterioration of their debt dynamics.</p>
+</div>
+<hr>
+</section>
+</section>
+<section id="regression-analysis-drivers-of-debt-service-burden" class="level2">
+<h2 class="anchored" data-anchor-id="regression-analysis-drivers-of-debt-service-burden">4. Regression Analysis: Drivers of Debt Service Burden</h2>
+<p>To disentangle the determinants of debt service pressure, an OLS regression was estimated on the cross-section of developing countries with complete data (n = 111).</p>
+<section id="results-1" class="level3">
+<h3 class="anchored" data-anchor-id="results-1">4.1 Results</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Estimate</th>
+<th>Std. Error</th>
+<th>t-value</th>
+<th>p-value</th>
+<th>Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td>19.667</td>
+<td>3.119</td>
+<td>6.305</td>
+<td>&lt; 0.001</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>External debt (% GNI)</td>
+<td><strong>0.084</strong></td>
+<td>0.022</td>
+<td>3.866</td>
+<td>&lt; 0.001</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>Short-term debt share</td>
+<td>-0.059</td>
+<td>0.107</td>
+<td>-0.547</td>
+<td>0.586</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Reserves (months imports)</td>
+<td>-0.613</td>
+<td>0.389</td>
+<td>-1.576</td>
+<td>0.118</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Concessional share</td>
+<td>-10.209</td>
+<td>8.086</td>
+<td>-1.263</td>
+<td>0.210</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Grant element</td>
+<td><strong>-0.193</strong></td>
+<td>0.065</td>
+<td>-2.954</td>
+<td>0.004</td>
+<td>**</td>
+</tr>
+</tbody>
+</table>
+<pre><code>\input{/Users/apple/Desktop/Professional /2026 Applications/FDL/debt_results.tex}</code></pre>
+<p><em>R² = 0.278 (Adjusted R² = 0.244). F-statistic: 8.082 on 5 and 105 df, p &lt; 0.001.</em></p>
+</section>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">4.2 Interpretation</h3>
+<p>Two variables are statistically significant predictors of debt service burden:</p>
+<p><strong>External debt stock (% GNI)</strong> is the strongest and most precisely estimated predictor. A 10 percentage point increase in the debt-to-GNI ratio is associated with an additional <strong>0.84 percentage points</strong> of debt service as a share of exports, holding other factors constant. This confirms that stock accumulation directly translates into service pressure.</p>
+<p><strong>Grant element on new commitments</strong> is the second significant predictor, with a negative sign: a 10 percentage point increase in the grant element on new loans is associated with a <strong>1.93 percentage point reduction</strong> in debt service burden. This finding is particularly policy-relevant — it quantifies the direct benefit of concessional financing for near-term debt sustainability, and underscores the cost of the structural shift toward market-rate borrowing documented in Figure 4.</p>
+<p>The <strong>reserve coverage, short-term debt share, and concessional stock share</strong> are in the expected direction but do not reach conventional significance thresholds, likely due to cross-country heterogeneity and the relatively small sample. The concessional share result (-10.2, p = 0.21) is economically substantial and warrants further investigation with a larger or panel dataset.</p>
+<p>The model explains <strong>27.8% of the cross-country variation</strong> in debt service ratios — a reasonable fit for a parsimonious cross-sectional specification, and consistent with the expectation that country-specific factors not captured here (exchange rate dynamics, domestic fiscal conditions, debt maturity profiles) also play important roles.</p>
+<div class="key-finding">
+<p><strong>Finding 5:</strong> The regression confirms two robust, policy-actionable drivers of debt service burden: (1) the level of debt accumulation, and (2) the terms on which new borrowing is contracted. Countries that maintain access to concessional finance face materially lower service burdens, all else equal — a direct argument for expanding MDB lending capacity and preserving grant windows.</p>
+</div>
+<hr>
+</section>
+</section>
+<section id="policy-implications" class="level2">
+<h2 class="anchored" data-anchor-id="policy-implications">5. Policy Implications</h2>
+<div class="policy-box">
+<p><strong>1. Strengthen the G20 Common Framework for debt restructuring.</strong> The concentration of bilateral and bond creditors identified in Figure 2 — with heterogeneous legal frameworks and incentive structures — explains the slow pace of restructuring under the Common Framework. Credible burden-sharing rules and tighter timelines for comparability of treatment are essential.</p>
+</div>
+<div class="policy-box">
+<p><strong>2. Expand concessional lending capacity at multilateral development banks.</strong> The regression results directly quantify the fiscal benefit of concessional financing. The ongoing capital adequacy reviews at the World Bank and regional MDBs should prioritise expanding IDA and concessional windows, particularly for countries being priced out of sovereign bond markets.</p>
+</div>
+<div class="policy-box">
+<p><strong>3. Implement early warning systems based on composite indicators.</strong> This analysis demonstrates that debt stock ratios alone are insufficient — countries can face acute service pressure at moderate debt levels if terms are unfavourable or maturities compressed. A composite early warning framework incorporating debt service ratios, reserve adequacy, short-term share, and grant element trends would improve detection of countries approaching distress.</p>
+</div>
+<div class="policy-box">
+<p><strong>4. Address the negative grant element problem urgently.</strong> Several countries identified in Figure 4 are accessing new financing at below-zero grant elements — effectively borrowing on terms worse than market. This is inconsistent with debt sustainability and likely reflects constrained alternatives. Expanding emergency concessional facilities (including IMF RST and MDB crisis windows) would reduce this distortion.</p>
+</div>
+<hr>
+</section>
+<section id="limitations-and-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-extensions">6. Limitations and Extensions</h2>
+<p>This analysis is cross-sectional and uses a single year (2023), which limits causal inference and the ability to track trajectories. Key extensions would include:</p>
+<ul>
+<li><strong>Panel estimation</strong> using IDS data from 2000–2023 to exploit within-country variation and control for unobserved heterogeneity</li>
+<li><strong>Creditor-specific analysis</strong> — particularly separating Chinese bilateral lending from Paris Club bilateral creditors, which have very different restructuring dynamics</li>
+<li><strong>Domestic debt</strong> — the IDS covers only external debt; domestic debt obligations are not captured but are increasingly relevant for frontier market economies</li>
+<li><strong>Integration with IMF DSA outputs</strong> — combining IDS data with IMF Debt Sustainability Analysis classifications would allow validation of the risk flags used here</li>
+</ul>
+<hr>
+</section>
+<section id="data-and-replication" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-replication">7. Data and Replication</h2>
+<p>All data are publicly available from the <a href="https://databank.worldbank.org/source/international-debt-statistics">World Bank IDS Databank</a>. Analysis was conducted in R using the <code>tidyverse</code>, <code>ggplot2</code>, <code>scales</code>, <code>ggrepel</code>, and <code>countrycode</code> packages. The full replication code is available on request.</p>
+<hr>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
